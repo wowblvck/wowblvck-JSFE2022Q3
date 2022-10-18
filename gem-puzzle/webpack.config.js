@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ghpages = require('gh-pages');
 
 const isProduction = process.env.NODE_ENV == 'production';
 
@@ -90,6 +91,11 @@ module.exports = () => {
         config.plugins.push(new MiniCssExtractPlugin({
             filename: '[name].[contenthash].css'
         }));
+
+        ghpages.publish('dist', {
+            dest: 'gem-puzzle',
+            message: 'build: gem-puzzle production'
+        });
         
     } else {
         config.mode = 'development';
