@@ -1,4 +1,19 @@
 {
-    "parser": "@babel/eslint-parser",
-    "extends": ["airbnb"]
+  "parser": "@babel/eslint-parser",
+  "extends": ["airbnb"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "no-unused-vars": [
+      "error",
+      {
+          "ignoreRestSiblings": true,
+          "destructuredArrayIgnorePattern": "[A-Z]",
+          "caughtErrors": "none"
+      }
+    ],
+    "no-new": 0
+  }
 }

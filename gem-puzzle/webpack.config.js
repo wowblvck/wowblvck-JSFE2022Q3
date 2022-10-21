@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ghpages = require('gh-pages');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const WebpackObfuscator = require('webpack-obfuscator');
 
 const isProduction = process.env.NODE_ENV == 'production';
 
@@ -93,6 +94,10 @@ module.exports = () => {
         config.plugins.push(new MiniCssExtractPlugin({
             filename: '[name].[contenthash].css'
         }));
+
+        config.plugins.push(new WebpackObfuscator({
+            rotateStringArray: true
+        }, ['[name].[contenthash].js']));
 
         ghpages.publish('dist', {
             dest: 'gem-puzzle',
