@@ -26,7 +26,7 @@ const config = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'src', 'index.html')
         }),
-        new ESLintPlugin()
+        new ESLintPlugin({fix: true})
     ],
     module: {
         rules: [
@@ -40,7 +40,7 @@ const config = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                    presets: ['@babel/preset-env']
+                        presets: ['@babel/preset-env']
                     }
                 }
             },

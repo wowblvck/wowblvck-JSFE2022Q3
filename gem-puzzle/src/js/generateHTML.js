@@ -12,7 +12,7 @@ export default class GeneratePage {
                   <p class="info__moves">Move: <span class="info__step">0</span></p>
                   <p class="info__time">Time: <span class="info__timepass">00:00</span></p>
               </div>
-              <canvas id="puzzle" class="game" width="600" height="600" style="border:1px solid #000000;"></canvas>
+              <canvas id="puzzle" class="game"></canvas>
               <div class="frame">
                   <p class="frame__title">Frame: <span class="frame__selection">4x4</span></p>
                   <div class="frame__wrapper">

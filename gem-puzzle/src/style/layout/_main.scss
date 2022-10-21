@@ -2,6 +2,7 @@
 
 .wrapper {
     margin: 0 auto;
+    padding: 0 20px;
     margin-top: 50px;
     display: flex;
     flex-direction: column;
@@ -23,6 +24,7 @@
 
 .game {
     margin-top: 15px;
+    border:1px solid #000000;
 }
 
 .frame {
