@@ -16,10 +16,10 @@ export default class GeneratePage {
               <div class="frame">
                   <p class="frame__title">Frame: <span class="frame__selection">4x4</span></p>
                   <div class="frame__wrapper">
-                      <p class="frame__select">Choose frame size:</p>
                       <select class="frame__list" name="frames">
+                          <option class="frame__option" selected disabled>Choose size:</option>
                           <option class="frame__option" value="3">3x3</option>
-                          <option class="frame__option" value="4" selected>4x4</option>
+                          <option class="frame__option" value="4">4x4</option>
                           <option class="frame__option" value="5">5x5</option>
                           <option class="frame__option" value="6">6x6</option>
                           <option class="frame__option" value="7">7x7</option>

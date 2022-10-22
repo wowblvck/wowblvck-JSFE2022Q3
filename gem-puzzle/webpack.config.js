@@ -95,9 +95,9 @@ module.exports = () => {
             filename: '[name].[contenthash].css'
         }));
 
-        config.plugins.push(new WebpackObfuscator({
-            rotateStringArray: true
-        }, ['[name].[contenthash].js']));
+        // config.plugins.push(new WebpackObfuscator({
+        //     rotateStringArray: true
+        // }));
 
         ghpages.publish('dist', {
             dest: 'gem-puzzle',

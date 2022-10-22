@@ -7,7 +7,12 @@
   },
   "rules": {
     "no-new": 0,
-    "no-console": "off"
+    "no-console": "off",
+    "no-debugger": "off",
+    "no-alert": "off",
+    "no-bitwise": "off",
+    "eqeqeq": "off",
+    "no-use-before-define": "off"
     // "no-plusplus": 0
   }
 }

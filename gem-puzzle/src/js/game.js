@@ -1,74 +1,33 @@
 export default class Game {
-  constructor(context, cellSize, framesize) {
-    this.nowstate = framesize;
-
+  constructor(context, cellSize, frameSize) {
+    this.nowstate = frameSize;
+    this.state = Game.setState(this.nowstate);
     this.color = '#008aff';
-
     this.context = context;
     this.cellSize = cellSize;
-
     this.clicks = 0;
-
-    this.state = Game.checkSize(this.nowstate);
-
-    this.selectSize();
   }
 
-  static getClicks() {
-    return this.clicks;
-  }
-
-  static checkSize = (n) => {
+  static setState(n) {
     const matrix = [];
     for (let i = 0; i < n; i += 1) {
-      matrix.push([]);
-    }
-    for (let i = 0; i < n; i += 1) {
+      matrix[i] = [];
       for (let j = 0; j < n; j += 1) {
         matrix[i][j] = n * i + j + 1;
       }
     }
     matrix[n - 1][n - 1] = 0;
     return matrix;
-  };
+  }
 
-  cellView = (x, y) => {
-    this.context.fillStyle = this.color;
-    this.context.fillRect(
-      x + 1,
-      y + 1,
-      this.cellSize - 2,
-      this.cellSize - 2,
-    );
-  };
-
-  numView = () => {
-    this.context.font = '1.8em Montserrat';
-    this.context.textAlign = 'center';
-    this.context.textBaseline = 'middle';
-    this.context.fillStyle = '#000';
-  };
-
-  draw = () => {
-    for (let i = 0; i < this.nowstate; i += 1) {
-      for (let j = 0; j < this.nowstate; j += 1) {
-        if (this.state[i][j] > 0) {
-          this.cellView(
-            j * this.cellSize,
-            i * this.cellSize,
-          );
-          this.numView();
-          this.context.fillText(
-            this.state[i][j],
-            j * this.cellSize + this.cellSize / 2,
-            i * this.cellSize + this.cellSize / 2,
-          );
-        }
-      }
+  static getRandomBool() {
+    if (Math.floor(Math.random() * 2) === 0) {
+      return true;
     }
-  };
+    return false;
+  }
 
-  getNullCell = () => {
+  getNullCell() {
     for (let i = 0; i < this.nowstate; i += 1) {
       for (let j = 0; j < this.nowstate; j += 1) {
         if (this.state[j][i] === 0) {
@@ -77,42 +36,9 @@ export default class Game {
       }
     }
     return false;
-  };
+  }
 
-  move = (x, y) => {
-    const nullCell = this.getNullCell();
-    const canMoveVertical = (x - 1 === nullCell.x || x + 1 === nullCell.x) && y === nullCell.y;
-    const canMoveHorizontal = (y - 1 === nullCell.y || y + 1 === nullCell.y) && x === nullCell.x;
-
-    if (canMoveVertical || canMoveHorizontal) {
-      this.state[nullCell.y][nullCell.x] = this.state[y][x];
-      this.state[y][x] = 0;
-      this.clicks += 1;
-    }
-  };
-
-  victory = () => {
-    const combination = this.checkSize(this.nowstate);
-    let res = true;
-    for (let i = 0; i < this.nowstate; i += 1) {
-      for (let j = 0; j < this.nowstate; i += 1) {
-        if (combination[i][j] !== this.state[i][j]) {
-          res = false;
-          break;
-        }
-      }
-    }
-    return res;
-  };
-
-  static getRandomBool = () => {
-    if (Math.floor(Math.random() * 2) === 0) {
-      return true;
-    }
-    return false;
-  };
-
-  mix = (count, n) => {
+  mix(count, n) {
     let x;
     let y;
     for (let i = 0; i < count; i += 1) {
@@ -141,33 +67,72 @@ export default class Game {
         this.move(x, y);
       }
     }
-
     this.clicks = 0;
+  }
+
+  cellView(x, y) {
+    this.context.fillStyle = this.color;
+    this.context.fillRect(
+      x + 1,
+      y + 1,
+      this.cellSize - 2,
+      this.cellSize - 2,
+    );
+  }
+
+  numView() {
+    this.context.font = '1.8em Montserrat';
+    this.context.textAlign = 'center';
+    this.context.textBaseline = 'middle';
+    this.context.fillStyle = '#000';
+  }
+
+  draw = () => {
+    for (let i = 0; i < this.nowstate; i += 1) {
+      for (let j = 0; j < this.nowstate; j += 1) {
+        if (this.state[i][j] > 0) {
+          this.cellView(
+            j * this.cellSize,
+            i * this.cellSize,
+          );
+          this.numView();
+          this.context.fillText(
+            this.state[i][j],
+            j * this.cellSize + this.cellSize / 2,
+            i * this.cellSize + this.cellSize / 2,
+          );
+        }
+      }
+    }
   };
 
-  static createPuzzle = (n) => {
-    const canvas = document.getElementById('puzzle');
-    canvas.width = 320;
-    canvas.height = 320;
+  move(x, y) {
+    const nullCell = this.getNullCell();
+    const canMoveVertical = (x - 1 === nullCell.x || x + 1 === nullCell.x) && y === nullCell.y;
+    const canMoveHorizontal = (y - 1 === nullCell.y || y + 1 === nullCell.y) && x === nullCell.x;
 
-    const context = canvas.getContext('2d');
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    if (canMoveVertical || canMoveHorizontal) {
+      this.state[nullCell.y][nullCell.x] = this.state[y][x];
+      this.state[y][x] = 0;
+      this.clicks += 1;
+    }
+  }
 
-    const cellSize = canvas.width / n;
+  getClicks() {
+    return this.clicks;
+  }
 
-    const game = new Game(context, cellSize, n);
-    game.mix(300, n);
-    game.draw();
-  };
-
-  selectSize = () => {
-    this.list = document.querySelector('.frame__list');
-    this.selection = document.querySelector('.frame__selection');
-    this.list.addEventListener('change', (e) => {
-      e.preventDefault();
-      const nowstate = e.target.value;
-      this.selection.textContent = `${nowstate}x${nowstate}`;
-      Game.createPuzzle(nowstate);
-    });
-  };
+  victory() {
+    const combination = Game.setState(this.nowstate);
+    let res = true;
+    for (let i = 0; i < this.nowstate; i += 1) {
+      for (let j = 0; j < this.nowstate; i += 1) {
+        if (combination[i][j] != this.state[i][j]) {
+          res = false;
+          break;
+        }
+      }
+    }
+    return res;
+  }
 }
