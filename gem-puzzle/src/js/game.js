@@ -126,7 +126,7 @@ export default class Game {
     const combination = Game.setState(this.nowstate);
     let res = true;
     for (let i = 0; i < this.nowstate; i += 1) {
-      for (let j = 0; j < this.nowstate; i += 1) {
+      for (let j = 0; j < this.nowstate; j += 1) {
         if (combination[i][j] != this.state[i][j]) {
           res = false;
           break;
