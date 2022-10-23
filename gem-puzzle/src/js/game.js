@@ -1,4 +1,17 @@
+import clack from '../assets/sounds/clack.wav';
+import win from '../assets/sounds/win.wav';
+
 export default class Game {
+  static nowGame;
+
+  static nowCellsize;
+
+  static sound = new Audio(clack);
+
+  static win = new Audio(win);
+
+  static soundEnabled = true;
+
   constructor(context, cellSize, frameSize) {
     this.nowstate = frameSize;
     this.state = Game.setState(this.nowstate);
@@ -6,6 +19,9 @@ export default class Game {
     this.context = context;
     this.cellSize = cellSize;
     this.clicks = 0;
+    this.timerEnabled = false;
+    this.totalSeconds = 0;
+    this.intervalTimer = 0;
   }
 
   static setState(n) {
@@ -81,7 +97,7 @@ export default class Game {
   }
 
   numView() {
-    this.context.font = '1.8em Montserrat';
+    this.context.font = `${this.cellSize / 2}px Montserrat`;
     this.context.textAlign = 'center';
     this.context.textBaseline = 'middle';
     this.context.fillStyle = '#000';
@@ -136,47 +152,107 @@ export default class Game {
     return res;
   }
 
+  static setTime() {
+    const titleMinutes = document.querySelector('.time__minutes');
+    const titleSeconds = document.querySelector('.time__seconds');
+    Game.nowGame.totalSeconds += 1;
+    titleSeconds.textContent = Game.pad(Game.nowGame.totalSeconds % 60);
+    titleMinutes.textContent = Game.pad(parseInt(Game.nowGame.totalSeconds / 60, 10));
+  }
+
+  static pad(val) {
+    const valString = `${val}`;
+    if (valString.length < 2) {
+      return `0${valString}`;
+    }
+    return valString;
+  }
+
   static createPuzzle(n) {
+    this.nowstate = n;
     const canvas = document.getElementById('puzzle');
     canvas.width = 280;
     canvas.height = 280;
 
     const context = canvas.getContext('2d');
     context.fillRect(0, 0, canvas.width, canvas.height);
-    let cellSize = canvas.width / n;
-    let game = new Game(context, cellSize, n);
+    const cellSize = canvas.width / n;
+    Game.nowCellsize = cellSize;
+    const game = new Game(context, cellSize, n);
+    Game.nowGame = game;
     game.mix(300, n);
     game.draw();
 
-    canvas.addEventListener('click', (e) => {
-      const x = (e.pageX - canvas.offsetLeft) / cellSize | 0;
-      const y = (e.pageY - canvas.offsetTop) / cellSize | 0;
-      this.onEvent(game, x, y);
-    });
+    this.eventHandlers();
+  }
 
-    canvas.addEventListener('touchend', (e) => {
-      const x = (e.touches[0].pageX - canvas.offsetLeft) / cellSize | 0;
-      const y = (e.touches[0].pageY - canvas.offsetTop) / cellSize | 0;
-      this.onEvent(game, x, y);
-    });
-
+  static eventHandlers() {
+    const canvas = document.getElementById('puzzle');
     const list = document.querySelector('.frame__list');
-    list.addEventListener('change', (e) => {
-      e.preventDefault();
-      const nowstate = e.target.value;
-      const selection = document.querySelector('.frame__selection');
-      selection.textContent = `${nowstate}x${nowstate}`;
+    const startBtn = document.querySelector('.btn__start');
+    const soundBtn = document.querySelector('.btn__sound');
+    canvas.addEventListener('click', (e) => this.canvasMove(e));
+    list.addEventListener('change', (e) => this.frameChange(e));
+    startBtn.addEventListener('click', (e) => this.shuffleGame(e));
+    soundBtn.addEventListener('click', () => this.soundOff());
+  }
 
-      canvas.width = 280;
-      canvas.height = 280;
+  static soundOff() {
+    const btnSoundTitle = document.querySelector('.btn__sound');
+    if (Game.soundEnabled == true) {
+      Game.soundEnabled = false;
+      btnSoundTitle.innerHTML = '<span>Sound on</span>';
+    } else {
+      Game.soundEnabled = true;
+      btnSoundTitle.innerHTML = '<span>Sound off</span>';
+    }
+  }
 
-      context.fillRect(0, 0, canvas.width, canvas.height);
-      cellSize = canvas.width / e.target.value;
-      game = new Game(context, cellSize, e.target.value);
-      game.mix(300, e.target.value);
-      game.draw();
-      document.querySelector('.info__step').textContent = `${game.getClicks()}`;
-    });
+  static canvasMove(e) {
+    if (Game.soundEnabled == true) {
+      Game.sound.play();
+    }
+    if (Game.nowGame.timerEnabled == false) {
+      Game.nowGame.intervalTimer = setInterval(this.setTime, 1000);
+      Game.nowGame.timerEnabled = true;
+    }
+    const canvas = document.getElementById('puzzle');
+    const x = (e.pageX - canvas.offsetLeft) / Game.nowCellsize | 0;
+    const y = (e.pageY - canvas.offsetTop) / Game.nowCellsize | 0;
+    this.onEvent(Game.nowGame, x, y);
+  }
+
+  static frameChange(e) {
+    e.preventDefault();
+    clearInterval(Game.nowGame.intervalTimer);
+    Game.nowGame.timerEnabled = false;
+    const list = document.querySelector('.frame__list');
+    list.replaceWith(list.cloneNode(true));
+
+    const soundBtn = document.querySelector('.btn__sound');
+    soundBtn.replaceWith(soundBtn.cloneNode(true));
+
+    this.clicks = 0;
+    this.nowstate = e.target.value;
+    const selection = document.querySelector('.frame__selection');
+    selection.textContent = `${this.nowstate}x${this.nowstate}`;
+    Game.createPuzzle(this.nowstate);
+    document.querySelector('.info__step').textContent = `${Game.nowGame.getClicks()}`;
+    document.querySelector('.time__minutes').textContent = '00';
+    document.querySelector('.time__seconds').textContent = '00';
+  }
+
+  static shuffleGame(e) {
+    e.preventDefault();
+    clearInterval(Game.nowGame.intervalTimer);
+    Game.nowGame.timerEnabled = false;
+    const startBtn = document.querySelector('.btn__start');
+    startBtn.replaceWith(startBtn.cloneNode(true));
+    this.clicks = 0;
+    Game.createPuzzle(this.nowstate);
+    document.querySelector('.info__step').textContent = `${Game.nowGame.getClicks()}`;
+    document.querySelector('.time__minutes').textContent = '00';
+    document.querySelector('.time__seconds').textContent = '00';
   }
 
   static onEvent(game, x, y) {
@@ -187,10 +263,42 @@ export default class Game {
     game.draw();
     document.querySelector('.info__step').textContent = `${game.getClicks()}`;
     if (game.victory()) {
-      alert(`Собрано за ${game.getClicks()} касание!`);
-      game.mix(300);
-      context.fillRect(0, 0, canvas.width, canvas.height);
-      game.draw(context, this.cellSize);
+      clearInterval(game.intervalTimer);
+      Game.nowGame.timerEnabled = false;
+      if (Game.soundEnabled == true) {
+        Game.win.play();
+      }
+
+      const popup = document.querySelector('.overlay');
+      const winPopup = document.querySelector('.win');
+      popup.classList.add('active');
+      winPopup.classList.add('active');
+
+      const winMovesTitle = document.querySelector('.win__moves');
+      winMovesTitle.textContent = `${game.getClicks()}`;
+
+      const winMinutes = document.querySelector('.win__minutes');
+      const winSeconds = document.querySelector('.win__seconds');
+      const timeMinutes = document.querySelector('.time__minutes');
+      const timeSeconds = document.querySelector('.time__seconds');
+
+      winMinutes.textContent = timeMinutes.textContent;
+      winSeconds.textContent = timeSeconds.textContent;
+
+      popup.addEventListener('click', (e) => {
+        if (popup == e.target) {
+          this.clicks = 0;
+          Game.nowGame.totalSeconds = 0;
+          timeMinutes.textContent = '00';
+          timeSeconds.textContent = '00';
+          document.querySelector('.info__step').textContent = `${Game.nowGame.getClicks()}`;
+          popup.classList.remove('active');
+          winPopup.classList.remove('active');
+          game.mix(300, this.nowstate);
+          context.fillRect(0, 0, canvas.width, canvas.height);
+          game.draw(context, this.cellSize, this.nowstate);
+        }
+      }, true);
     }
   }
 }

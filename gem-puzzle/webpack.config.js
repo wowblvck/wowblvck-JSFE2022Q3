@@ -26,7 +26,8 @@ const config = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'src', 'index.html')
         }),
-        new ESLintPlugin({fix: true})
+        new ESLintPlugin({fix: true}),
+        // new WebpackObfuscator({rotateStringArray: true})
     ],
     module: {
         rules: [
@@ -82,6 +83,10 @@ const config = {
                     filename: 'fonts/[name][ext]'
                 }
             },
+            {
+                test: /\.(mp3|wav|aac)$/i,
+                type: 'asset/resource'
+            },
         ],
     },
 };
@@ -94,10 +99,6 @@ module.exports = () => {
         config.plugins.push(new MiniCssExtractPlugin({
             filename: '[name].[contenthash].css'
         }));
-
-        // config.plugins.push(new WebpackObfuscator({
-        //     rotateStringArray: true
-        // }));
 
         ghpages.publish('dist', {
             dest: 'gem-puzzle',
