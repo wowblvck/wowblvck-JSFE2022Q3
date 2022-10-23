@@ -22,6 +22,7 @@ export default class Game {
     this.timerEnabled = false;
     this.totalSeconds = 0;
     this.intervalTimer = 0;
+    this.stopGame = false;
   }
 
   static setState(n) {
@@ -190,11 +191,26 @@ export default class Game {
     const canvas = document.getElementById('puzzle');
     const list = document.querySelector('.frame__list');
     const startBtn = document.querySelector('.btn__start');
+    const stopBtn = document.querySelector('.btn__stop');
     const soundBtn = document.querySelector('.btn__sound');
     canvas.addEventListener('click', (e) => this.canvasMove(e));
     list.addEventListener('change', (e) => this.frameChange(e));
     startBtn.addEventListener('click', (e) => this.shuffleGame(e));
     soundBtn.addEventListener('click', () => this.soundOff());
+    stopBtn.addEventListener('click', () => this.stopGame());
+  }
+
+  static stopGame() {
+    const stopBtn = document.querySelector('.btn__stop');
+    if (Game.nowGame.stopGame == false && Game.nowGame.totalSeconds != 0 && Game.nowGame.clicks != 0) {
+      Game.nowGame.stopGame = true;
+      stopBtn.innerHTML = '<span>Start</span>';
+      clearInterval(Game.nowGame.intervalTimer);
+    } else if (Game.nowGame.stopGame == true && Game.nowGame.totalSeconds > 0 && Game.nowGame.clicks > 0) {
+      Game.nowGame.stopGame = false;
+      stopBtn.innerHTML = '<span>Stop</span>';
+      Game.nowGame.intervalTimer = setInterval(this.setTime, 1000);
+    }
   }
 
   static soundOff() {
@@ -209,17 +225,19 @@ export default class Game {
   }
 
   static canvasMove(e) {
-    if (Game.soundEnabled == true) {
-      Game.sound.play();
+    if (Game.nowGame.stopGame != true) {
+      if (Game.soundEnabled == true) {
+        Game.sound.play();
+      }
+      if (Game.nowGame.timerEnabled == false) {
+        Game.nowGame.intervalTimer = setInterval(this.setTime, 1000);
+        Game.nowGame.timerEnabled = true;
+      }
+      const canvas = document.getElementById('puzzle');
+      const x = (e.pageX - canvas.offsetLeft) / Game.nowCellsize | 0;
+      const y = (e.pageY - canvas.offsetTop) / Game.nowCellsize | 0;
+      this.onEvent(Game.nowGame, x, y);
     }
-    if (Game.nowGame.timerEnabled == false) {
-      Game.nowGame.intervalTimer = setInterval(this.setTime, 1000);
-      Game.nowGame.timerEnabled = true;
-    }
-    const canvas = document.getElementById('puzzle');
-    const x = (e.pageX - canvas.offsetLeft) / Game.nowCellsize | 0;
-    const y = (e.pageY - canvas.offsetTop) / Game.nowCellsize | 0;
-    this.onEvent(Game.nowGame, x, y);
   }
 
   static frameChange(e) {
@@ -231,6 +249,11 @@ export default class Game {
 
     const soundBtn = document.querySelector('.btn__sound');
     soundBtn.replaceWith(soundBtn.cloneNode(true));
+
+    Game.nowGame.stopGame = false;
+    const stopBtn = document.querySelector('.btn__stop');
+    stopBtn.innerHTML = '<span>Stop</span>';
+    stopBtn.replaceWith(stopBtn.cloneNode(true));
 
     this.clicks = 0;
     this.nowstate = e.target.value;
@@ -246,8 +269,18 @@ export default class Game {
     e.preventDefault();
     clearInterval(Game.nowGame.intervalTimer);
     Game.nowGame.timerEnabled = false;
+
+    const list = document.querySelector('.frame__list');
+    list.replaceWith(list.cloneNode(true));
+
     const startBtn = document.querySelector('.btn__start');
     startBtn.replaceWith(startBtn.cloneNode(true));
+
+    Game.nowGame.stopGame = false;
+    const stopBtn = document.querySelector('.btn__stop');
+    stopBtn.innerHTML = '<span>Stop</span>';
+    stopBtn.replaceWith(stopBtn.cloneNode(true));
+
     this.clicks = 0;
     Game.createPuzzle(this.nowstate);
     document.querySelector('.info__step').textContent = `${Game.nowGame.getClicks()}`;
