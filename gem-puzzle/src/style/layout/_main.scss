@@ -17,17 +17,10 @@
 
 .info {
     display: flex;
+    flex-direction: column;
     margin-top: 15px;
     font-weight: 500;
     font-size: 1.3rem;
-    &__moves {
-        text-align: left;
-        width: 100px;
-    }
-    &__time {
-        text-align: left;
-        width: 130px;
-    }
 }
 
 .game {

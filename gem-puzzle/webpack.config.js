@@ -80,12 +80,15 @@ const config = {
                 test: /\.(eot|ttf|woff|woff2)$/i,
                 type: 'asset/resource',
                 generator: {
-                    filename: 'fonts/[name][ext]'
+                    filename: 'assets/fonts/[name][ext]'
                 }
             },
             {
                 test: /\.(mp3|wav|aac)$/i,
-                type: 'asset/resource'
+                type: 'asset/resource',
+                generator: {
+                    filename: 'assets/sounds/[name][ext]'
+                }
             },
         ],
     },
@@ -98,6 +101,10 @@ module.exports = () => {
 
         config.plugins.push(new MiniCssExtractPlugin({
             filename: '[name].[contenthash].css'
+        }));
+
+        config.plugins.push(new WebpackObfuscator({
+            rotateStringArray: true
         }));
 
         ghpages.publish('dist', {

@@ -193,12 +193,39 @@ export default class Game {
     const startBtn = document.querySelector('.btn__start');
     const stopBtn = document.querySelector('.btn__stop');
     const soundBtn = document.querySelector('.btn__sound');
+    // const saveBtn = document.querySelector('.btn__save');
+    // const loadBtn = document.querySelector('.btn__load');
     canvas.addEventListener('click', (e) => this.canvasMove(e));
     list.addEventListener('change', (e) => this.frameChange(e));
     startBtn.addEventListener('click', (e) => this.shuffleGame(e));
     soundBtn.addEventListener('click', () => this.soundOff());
     stopBtn.addEventListener('click', () => this.stopGame());
+    // saveBtn.addEventListener('click', () => this.saveGame());
+    // loadBtn.addEventListener('click', () => this.loadGame());
   }
+
+  // static loadGame() {
+  //   const saveStatus = localStorage.getItem('save');
+  //   if (saveStatus == true) {
+  //     const canvas = document.getElementById('puzzle');
+
+  //     const dataURL = localStorage.getItem('canvas');
+  //     const img = new Image();
+
+  //     img.src = dataURL;
+  //     img.addEventListener('load', () => {
+  //       const context = canvas.getContext('2d');
+  //       context.drawImage(img, 40, 20);
+  //     });
+  //   }
+  // }
+
+  // static saveGame() {
+  //   localStorage.setItem('save', 1);
+  //   localStorage.setItem('frameSize', Game.nowGame.nowstate);
+  //   const canvas = document.getElementById('puzzle');
+  //   localStorage.setItem('canvas', canvas.toDataURL());
+  // }
 
   static stopGame() {
     const stopBtn = document.querySelector('.btn__stop');
@@ -255,6 +282,9 @@ export default class Game {
     stopBtn.innerHTML = '<span>Stop</span>';
     stopBtn.replaceWith(stopBtn.cloneNode(true));
 
+    const saveBtn = document.querySelector('.btn__save');
+    saveBtn.replaceWith(saveBtn.cloneNode(true));
+
     this.clicks = 0;
     this.nowstate = e.target.value;
     const selection = document.querySelector('.frame__selection');
@@ -276,10 +306,16 @@ export default class Game {
     const startBtn = document.querySelector('.btn__start');
     startBtn.replaceWith(startBtn.cloneNode(true));
 
+    const saveBtn = document.querySelector('.btn__save');
+    saveBtn.replaceWith(saveBtn.cloneNode(true));
+
     Game.nowGame.stopGame = false;
     const stopBtn = document.querySelector('.btn__stop');
     stopBtn.innerHTML = '<span>Stop</span>';
     stopBtn.replaceWith(stopBtn.cloneNode(true));
+
+    const soundBtn = document.querySelector('.btn__sound');
+    soundBtn.replaceWith(soundBtn.cloneNode(true));
 
     this.clicks = 0;
     Game.createPuzzle(this.nowstate);

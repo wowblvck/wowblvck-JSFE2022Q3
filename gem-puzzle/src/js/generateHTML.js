@@ -6,10 +6,12 @@ export default class GeneratePage {
                   <button type="button" class="btn btn__start"><span>Shuffle and start</span></button>
                   <button type="button" class="btn btn__stop"><span>Stop</span></button>
                   <button type="button" class="btn btn__save"><span>Save</span></button>
+                  <button type="button" class="btn btn__load"><span>Load</span></button>
                   <button type="button" class="btn btn__results"><span>Results</span></button>
                   <button type="button" class="btn btn__sound"><span>Sound off</span></button>
               </div>
               <div class="info">
+                  <p class="info__name">Name: <span class="name__label">Unknown</span></p>
                   <p class="info__moves">Move: <span class="info__step">0</span></p>
                   <p class="info__time">Time: <span class="time__minutes">00</span>:<span class="time__seconds">00</span></p>
               </div>
@@ -30,9 +32,7 @@ export default class GeneratePage {
               </div>
               <div class="overlay">
                 <div class="win">
-                  <p class="win__title">Congratulations, you have completed the puzzle!</p>
-                  <p>Moves: <span class="win__moves">0</span></p>
-                  <p>Time: <span class="win__minutes">00</span>:<span class="win__seconds">00</span></p>
+                  <p class="win__title">Hooray! You solved the puzzle in <span class="win__minutes">00</span>:<span class="win__seconds">00</span> and <span class="win__moves">0</span> moves!</p>
                 </div>
               </div>
           </div>
