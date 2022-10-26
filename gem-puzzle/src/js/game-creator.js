@@ -60,7 +60,6 @@ export default class Game {
     let y;
     for (let i = 0; i < count; i += 1) {
       const nullCell = this.getNullCell();
-
       const verticalMove = Game.getRandomBool();
       const upLeft = Game.getRandomBool();
 
@@ -193,39 +192,43 @@ export default class Game {
     const startBtn = document.querySelector('.btn__start');
     const stopBtn = document.querySelector('.btn__stop');
     const soundBtn = document.querySelector('.btn__sound');
-    // const saveBtn = document.querySelector('.btn__save');
-    // const loadBtn = document.querySelector('.btn__load');
+    const saveBtn = document.querySelector('.btn__save');
+    const loadBtn = document.querySelector('.btn__load');
     canvas.addEventListener('click', (e) => this.canvasMove(e));
     list.addEventListener('change', (e) => this.frameChange(e));
     startBtn.addEventListener('click', (e) => this.shuffleGame(e));
     soundBtn.addEventListener('click', () => this.soundOff());
     stopBtn.addEventListener('click', () => this.stopGame());
-    // saveBtn.addEventListener('click', () => this.saveGame());
-    // loadBtn.addEventListener('click', () => this.loadGame());
+    saveBtn.addEventListener('click', () => this.saveGame());
+    loadBtn.addEventListener('click', () => this.loadGame());
   }
 
-  // static loadGame() {
-  //   const saveStatus = localStorage.getItem('save');
-  //   if (saveStatus == true) {
-  //     const canvas = document.getElementById('puzzle');
+  static loadGame() {
+    const saveStatus = localStorage.getItem('save');
+    if (saveStatus && saveStatus == 1) {
+      Game.nowGame.state = JSON.parse(localStorage.getItem('canvasPos'));
+      const canvas = document.getElementById('puzzle');
+      const context = canvas.getContext('2d');
+      context.clearRect(0, 0, 280, 280);
+      context.fillRect(0, 0, 280, 280);
+      Game.nowGame.draw();
+      Game.nowGame.clicks = Number(localStorage.getItem('moves'));
+      Game.nowGame.totalSeconds = Number(localStorage.getItem('time'));
+      const titleMinutes = document.querySelector('.time__minutes');
+      const titleSeconds = document.querySelector('.time__seconds');
+      const clicks = document.querySelector('.info__step');
+      clicks.textContent = `${Game.nowGame.getClicks()}`;
+      titleSeconds.textContent = Game.pad(Game.nowGame.totalSeconds % 60);
+      titleMinutes.textContent = Game.pad(parseInt(Game.nowGame.totalSeconds / 60, 10));
+    }
+  }
 
-  //     const dataURL = localStorage.getItem('canvas');
-  //     const img = new Image();
-
-  //     img.src = dataURL;
-  //     img.addEventListener('load', () => {
-  //       const context = canvas.getContext('2d');
-  //       context.drawImage(img, 40, 20);
-  //     });
-  //   }
-  // }
-
-  // static saveGame() {
-  //   localStorage.setItem('save', 1);
-  //   localStorage.setItem('frameSize', Game.nowGame.nowstate);
-  //   const canvas = document.getElementById('puzzle');
-  //   localStorage.setItem('canvas', canvas.toDataURL());
-  // }
+  static saveGame() {
+    localStorage.setItem('save', 1);
+    localStorage.setItem('canvasPos', JSON.stringify(Game.nowGame.state));
+    localStorage.setItem('moves', Game.nowGame.getClicks());
+    localStorage.setItem('time', Game.nowGame.totalSeconds);
+  }
 
   static stopGame() {
     const stopBtn = document.querySelector('.btn__stop');
@@ -269,6 +272,10 @@ export default class Game {
 
   static frameChange(e) {
     e.preventDefault();
+    localStorage.removeItem('save');
+    localStorage.removeItem('canvasPos');
+    localStorage.removeItem('time');
+    localStorage.removeItem('moves');
     clearInterval(Game.nowGame.intervalTimer);
     Game.nowGame.timerEnabled = false;
     const list = document.querySelector('.frame__list');
@@ -297,6 +304,10 @@ export default class Game {
 
   static shuffleGame(e) {
     e.preventDefault();
+    localStorage.removeItem('save');
+    localStorage.removeItem('canvasPos');
+    localStorage.removeItem('time');
+    localStorage.removeItem('moves');
     clearInterval(Game.nowGame.intervalTimer);
     Game.nowGame.timerEnabled = false;
 
