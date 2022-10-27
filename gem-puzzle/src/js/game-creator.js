@@ -1,5 +1,6 @@
 import clack from '../assets/sounds/clack.wav';
 import win from '../assets/sounds/win.wav';
+import Score from './score-generator';
 
 export default class Game {
   static nowGame;
@@ -194,6 +195,7 @@ export default class Game {
     const soundBtn = document.querySelector('.btn__sound');
     const saveBtn = document.querySelector('.btn__save');
     const loadBtn = document.querySelector('.btn__load');
+    const resultBtn = document.querySelector('.btn__results');
     canvas.addEventListener('click', (e) => this.canvasMove(e));
     list.addEventListener('change', (e) => this.frameChange(e));
     startBtn.addEventListener('click', (e) => this.shuffleGame(e));
@@ -201,6 +203,21 @@ export default class Game {
     stopBtn.addEventListener('click', () => this.stopGame());
     saveBtn.addEventListener('click', () => this.saveGame());
     loadBtn.addEventListener('click', () => this.loadGame());
+    resultBtn.addEventListener('click', () => this.loadResults());
+  }
+
+  static loadResults() {
+    const popup = document.querySelector('.overlay');
+    const resultPopup = document.querySelector('.results');
+    popup.classList.add('active');
+    resultPopup.classList.add('active');
+
+    popup.addEventListener('click', (e) => {
+      if (popup == e.target) {
+        popup.classList.remove('active');
+        resultPopup.classList.remove('active');
+      }
+    }, true);
   }
 
   static loadGame() {
@@ -278,6 +295,10 @@ export default class Game {
     localStorage.removeItem('moves');
     clearInterval(Game.nowGame.intervalTimer);
     Game.nowGame.timerEnabled = false;
+
+    const startBtn = document.querySelector('.btn__start');
+    startBtn.replaceWith(startBtn.cloneNode(true));
+
     const list = document.querySelector('.frame__list');
     list.replaceWith(list.cloneNode(true));
 
@@ -291,6 +312,15 @@ export default class Game {
 
     const saveBtn = document.querySelector('.btn__save');
     saveBtn.replaceWith(saveBtn.cloneNode(true));
+
+    const loadBtn = document.querySelector('.btn__load');
+    loadBtn.replaceWith(loadBtn.cloneNode(true));
+
+    const resultBtn = document.querySelector('.btn__results');
+    resultBtn.replaceWith(resultBtn.cloneNode(true));
+
+    const canvas = document.getElementById('puzzle');
+    canvas.replaceWith(canvas.cloneNode(true));
 
     this.clicks = 0;
     this.nowstate = e.target.value;
@@ -325,8 +355,17 @@ export default class Game {
     stopBtn.innerHTML = '<span>Stop</span>';
     stopBtn.replaceWith(stopBtn.cloneNode(true));
 
+    const loadBtn = document.querySelector('.btn__load');
+    loadBtn.replaceWith(loadBtn.cloneNode(true));
+
     const soundBtn = document.querySelector('.btn__sound');
     soundBtn.replaceWith(soundBtn.cloneNode(true));
+
+    const resultBtn = document.querySelector('.btn__results');
+    resultBtn.replaceWith(resultBtn.cloneNode(true));
+
+    const canvas = document.getElementById('puzzle');
+    canvas.replaceWith(canvas.cloneNode(true));
 
     this.clicks = 0;
     Game.createPuzzle(this.nowstate);
@@ -364,6 +403,12 @@ export default class Game {
 
       winMinutes.textContent = timeMinutes.textContent;
       winSeconds.textContent = timeSeconds.textContent;
+
+      console.log('ok');
+
+      const winTime = `${winMinutes.textContent}:${winSeconds.textContent}`;
+
+      Score.addScore(document.querySelector('.name__label').textContent, Game.nowGame.getClicks(), document.querySelector('.frame__selection').textContent, winTime);
 
       popup.addEventListener('click', (e) => {
         if (popup == e.target) {

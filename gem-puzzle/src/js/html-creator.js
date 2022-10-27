@@ -30,11 +30,19 @@ export default class GeneratePage {
                       </select>
                   </div>
               </div>
-              <div class="overlay">
-                <div class="win">
-                  <p class="win__title">Hooray! You solved the puzzle in <span class="win__minutes">00</span>:<span class="win__seconds">00</span> and <span class="win__moves">0</span> moves!</p>
-                </div>
+              <div class="overlay"></div>
+              <div class="win">
+                <p class="win__title">Hooray! You solved the puzzle in <span class="win__minutes">00</span>:<span class="win__seconds">00</span> and <span class="win__moves">0</span> moves!</p>
               </div>
+              <div class="results">
+                <ul class="scoreboard">
+                  <li class="scoreboard__item">Name</li>
+                  <li class="scoreboard__item">Moves</li>
+                  <li class="scoreboard__item">Frame<br>Size</li>
+                  <li class="scoreboard__item">Time</li>
+                </ul>
+              </div>
+            </div>
           </div>
       </div>
     `;
