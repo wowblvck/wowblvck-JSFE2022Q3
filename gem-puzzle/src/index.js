@@ -12,7 +12,7 @@ class Application {
   constructor() {
     new GeneratePage();
     window.addEventListener('load', () => {
-      Game.createPuzzle(defaultFrame);
+      new Game(defaultFrame);
     });
     window.addEventListener('DOMContentLoaded', () => {
       localStorage.clear();
