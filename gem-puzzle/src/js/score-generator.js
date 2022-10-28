@@ -1,3 +1,5 @@
+import { createNode } from './functions';
+
 export default class Score {
   constructor() {
     this.score = JSON.parse(localStorage.getItem('score'));
@@ -25,28 +27,21 @@ export default class Score {
 
     const resultWrapper = document.querySelector('.results');
 
-    const gamersList = document.createElement('ul');
-    gamersList.classList.add('gamers');
+    const gamersList = createNode('ul', 'gamers');
 
-    const gamersName = document.createElement('li');
-    gamersName.classList.add('gamers__name');
+    const gamersName = createNode('li', 'gamers__name');
     gamersName.textContent = name;
-    gamersList.append(gamersName);
 
-    const gamersMove = document.createElement('li');
-    gamersMove.classList.add('gamers__moves');
+    const gamersMove = createNode('li', 'gamers__moves');
     gamersMove.textContent = moves;
-    gamersList.append(gamersMove);
 
-    const gamersFrame = document.createElement('li');
-    gamersFrame.classList.add('gamers__frame');
+    const gamersFrame = createNode('li', 'gamers__frame');
     gamersFrame.textContent = frame;
-    gamersList.append(gamersFrame);
 
-    const gamersTime = document.createElement('li');
-    gamersTime.classList.add('gamers__time');
+    const gamersTime = createNode('li', 'gamers__time');
     gamersTime.textContent = time;
-    gamersList.append(gamersTime);
+
+    gamersList.append(gamersName, gamersMove, gamersFrame, gamersTime);
 
     resultWrapper.append(gamersList);
   }

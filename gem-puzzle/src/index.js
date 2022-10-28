@@ -5,6 +5,7 @@ import GeneratePage from './js/html-creator';
 import Game from './js/game-creator';
 import Generatename from './js/name-generator';
 
+// Defaut frame size for puzzle (4x4)
 const defaultFrame = 4;
 
 class Application {
@@ -15,7 +16,7 @@ class Application {
     });
     window.addEventListener('DOMContentLoaded', () => {
       localStorage.clear();
-      new Generatename(8).setName();
+      new Generatename(8);
     });
   }
 }
