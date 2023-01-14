@@ -1,0 +1,18 @@
+.color-picker{
+  height: 30px;
+  width: 45px;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  -webkit-appearance: none;
+}
+
+.color-picker::-webkit-color-swatch-wrapper {
+  padding: 0; 
+}
+
+.color-picker::-webkit-color-swatch {
+  border: 0;
+  border-radius: 20%;
+}
