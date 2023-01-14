@@ -35,5 +35,9 @@
     "watch": "webpack --watch",
     "serve": "webpack serve",
     "lint:fix": "npx eslint . --ext .js,.jsx,.ts,.tsx --fix"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.6",
+    "bootstrap": "^5.2.3"
   }
 }
