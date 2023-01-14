@@ -17,5 +17,6 @@
   // "files": ["src/client/index.ts"]
   "include": [
     "src/client",
+    "src/declarations/declaration.d.ts"
   ],
 }

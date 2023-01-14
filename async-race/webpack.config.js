@@ -4,6 +4,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ESLintPlugin = require('eslint-webpack-plugin');
+const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
 
 const isProduction = process.env.NODE_ENV == "production";
 
@@ -17,6 +18,10 @@ const config = {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].[contenthash].js",
     clean: isProduction,
+    assetModuleFilename: pathData => {
+      const filepath = path.dirname(pathData.filename).split('/').slice(1).join('/');
+      return `${filepath}/[name][ext]`;
+    },
   },
   devServer: {
     static: {
@@ -54,10 +59,13 @@ const config = {
         use: [stylesHandler, "css-loader", "postcss-loader"],
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-        type: "asset",
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
       },
-
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+      },
       // Add your rules for custom modules here
       // Learn more about loaders from https://webpack.js.org/loaders/
     ],
@@ -65,6 +73,28 @@ const config = {
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", "..."],
   },
+  optimization: {
+    minimizer: [
+      "...",
+      new ImageMinimizerPlugin({
+        minimizer: {
+          implementation: ImageMinimizerPlugin.imageminMinify,
+          options: {
+            plugins: [
+              'imagemin-gifsicle',
+              'imagemin-mozjpeg',
+              'imagemin-pngquant',
+              'imagemin-svgo',
+              ['gifsicle', {interlaced: true}],
+              ['jpegtran', {progressive: true}],
+              ['optipng', {optimizationLevel: 5}],
+            ],
+          },
+        },
+        loader: false,
+      }),
+    ],
+  }
 };
 
 module.exports = () => {
