@@ -14,5 +14,8 @@
       "webpack-env",
     ]
   },
-  "files": ["src/client/index.ts"]
+  // "files": ["src/client/index.ts"]
+  "include": [
+    "src/client",
+  ],
 }
