@@ -11,3 +11,4 @@ if (!root) throw new Error("Root container not load");
 
 root.classList.add("d-flex", "flex-column", "h-100");
 root.innerHTML = app.render();
+app.addEvents();

@@ -1,4 +1,6 @@
-class UpdateCar {
+import { AppComponent } from "../../../../core/interfaces/AppComponent";
+
+class UpdateCar implements AppComponent {
   render = () => `
   <div class="col-lg-5 mb-3 mb-lg-0">
     <div class="card">

@@ -1,6 +1,7 @@
 import githubIcon from "../../assets/icons/github-icon.svg";
+import { AppComponent } from "../../core/interfaces/AppComponent";
 
-class Footer {
+class Footer implements AppComponent {
   render = () => `
     <footer class="footer mt-auto py-3">
       <div class="container">

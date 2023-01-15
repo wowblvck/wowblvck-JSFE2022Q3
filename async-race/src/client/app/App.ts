@@ -13,7 +13,11 @@ class App {
     ${this.header.render()}
     ${this.content.render()}
     ${this.footer.render()}
-    `;
+  `;
+
+  addEvents = () => {
+    this.content.addEvents();
+  };
 }
 
 export default App;

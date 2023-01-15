@@ -1,7 +1,8 @@
 import garageIcon from "../../assets/icons/garage-icon.svg";
 import winnerIcon from "../../assets/icons/winners-icon.svg";
+import { AppComponent } from "../../core/interfaces/AppComponent";
 
-class Header {
+class Header implements AppComponent {
   render = () => `
     <header class="px-3 py-2 text-bg-dark">
       <div class="container">
@@ -26,7 +27,7 @@ class Header {
         </div>
       </div>
     </header>
-    `;
+  `;
 }
 
 export default Header;
