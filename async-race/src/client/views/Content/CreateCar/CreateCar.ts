@@ -11,7 +11,7 @@ class CreateCar {
             </div>
             <input type="color" class="color-picker" id="create-car-picker" value="#0000ff">
           </div>
-        <a href="#" class="btn btn-primary">Create</a>
+        <button class="btn btn-primary" disabled>Create</button>
       </div>
     </div>
   </div>

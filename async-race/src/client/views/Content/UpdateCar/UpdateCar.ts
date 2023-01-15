@@ -11,7 +11,7 @@ class UpdateCar {
             </div>
             <input type="color" class="color-picker" id="update-car-picker" value="#0000ff">
           </div>
-        <a href="#" class="btn btn-primary">Update</a>
+        <button class="btn btn-primary" disabled>Update</button>
       </div>
     </div>
   </div>
