@@ -48,7 +48,7 @@ class Store {
   }
 
   get Page() {
-    return this.state.currentPage as number;
+    return this.state.currentPage;
   }
 
   set Page(pageNumber: number) {
@@ -56,11 +56,11 @@ class Store {
   }
 
   get MaxPages() {
-    return this.state.maxPages as number;
+    return this.state.maxPages;
   }
 
   get ItemsOfPage() {
-    return this.state.itemsOfPage as number;
+    return this.state.itemsOfPage;
   }
 
   set ItemsOfPage(items: number) {
@@ -68,7 +68,7 @@ class Store {
   }
 
   get UpdateID() {
-    return this.state.idForUpdate as number;
+    return this.state.idForUpdate;
   }
 
   set UpdateID(id: number) {

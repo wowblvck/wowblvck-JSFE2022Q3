@@ -66,8 +66,8 @@ class CarView implements AppComponent {
       <button id="btn-remove-${
         this.id
       }" type="button" class="btn btn-outline-primary">Remove car</button>
-      <button type="button" class="btn btn-outline-primary">Start Engine</button>
-      <button type="button" class="btn btn-outline-primary">Stop Engine</button>
+      <button type="button" class="btn btn-outline-success">Start Engine</button>
+      <button type="button" class="btn btn-outline-success">Stop Engine</button>
     </div>
     <p class="fs-6 mb-0">${this.name}</p>
   </div>
