@@ -1,8 +1,8 @@
 import { AppComponent } from "../../core/interfaces/AppComponent";
-import Garage from "./Garage/Garage";
+import GarageView from "./GarageView/GarageView";
 
 class Content implements AppComponent {
-  private garage: Garage = new Garage();
+  private garage: GarageView = new GarageView();
 
   render = () => `
     ${this.garage.render()}

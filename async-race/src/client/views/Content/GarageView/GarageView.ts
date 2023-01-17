@@ -1,16 +1,34 @@
 import CreateCar from "./CreateCar/CreateCar";
 import UpdateCar from "./UpdateCar/UpdateCar";
-import Race from "./Race/Race";
+import GarageOptions from "./GarageOptions/GarageOptions";
+import RaceView from "./RaceView/RaceView";
 
-import "./Garage.scss";
-import { AppComponent } from "../../../core/interfaces/AppComponent";
+import "./GarageView.scss";
+import { carsLoadedEvent, Store } from "../../../core/components/Store";
 
-class Garage implements AppComponent {
+class GarageView {
   private create: CreateCar = new CreateCar();
 
   private update: UpdateCar = new UpdateCar();
 
-  private race: Race = new Race();
+  private garageOptions: GarageOptions = new GarageOptions();
+
+  private raceView: RaceView = new RaceView();
+
+  private store: Store = Store.getInstance();
+
+  constructor() {
+    carsLoadedEvent.on("cars-loaded", this.updateRender);
+  }
+
+  updateRender = () => {
+    const garageRace = document.getElementById("race-view");
+    if (garageRace) {
+      const raceView = new RaceView();
+      garageRace.innerHTML = raceView.render();
+      raceView.addEvents();
+    }
+  };
 
   render = () => `
   <main id="garage" class="flex-shrink-0 py-4">
@@ -27,20 +45,24 @@ class Garage implements AppComponent {
               <div class="row">
                 ${this.create.render()}
                 ${this.update.render()}
-                ${this.race.render()}
+                ${this.garageOptions.render()}
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+    <section id="race-view" class="py-3 container">
+      ${this.raceView.render()}
+    </section>
   </main>
   `;
 
   addEvents = () => {
     this.create.addEvents();
-    this.race.addEvents();
+    this.garageOptions.addEvents();
+    this.update.addEvents();
   };
 }
 
-export default Garage;
+export default GarageView;

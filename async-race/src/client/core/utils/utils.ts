@@ -1,4 +1,4 @@
-const generateRandomCars = () => {
+const generateRandomCars = (count = 100) => {
   const carModel = [
     "Aston Martin",
     "Porsche",
@@ -43,7 +43,7 @@ const generateRandomCars = () => {
 
   const cars = [];
 
-  for (let i = 0; i < 100; i += 1) {
+  for (let i = 0; i < count; i += 1) {
     const randomName = `${
       carModel[Math.floor(Math.random() * carModel.length)]
     } ${carBrand[Math.floor(Math.random() * carBrand.length)]}`;

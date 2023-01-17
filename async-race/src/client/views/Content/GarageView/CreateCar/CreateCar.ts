@@ -1,7 +1,10 @@
 import car from "../../../../core/components/Car";
+import { Store } from "../../../../core/components/Store";
 import { AppComponent } from "../../../../core/interfaces/AppComponent";
 
 class CreateCar implements AppComponent {
+  private store: Store = Store.getInstance();
+
   render = () => `
   <div class="col-lg-5 mb-3 mb-lg-0">
     <div class="card">
@@ -44,13 +47,13 @@ class CreateCar implements AppComponent {
           name: createInput.value,
           color: createColorPicker.value,
         };
-        console.log(body);
         car
           .create(body)
           .then(() => {
             createInput.value = "";
             createBtn.disabled = true;
             createColorPicker.value = "#0000ff";
+            this.store.loadAllCars(this.store.Page);
           })
           .catch((error) => console.error(error));
       }

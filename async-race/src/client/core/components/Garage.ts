@@ -1,22 +1,26 @@
-class Garage {
-  static isExits = false;
+import Race from "../../views/Content/GarageView/RaceView/RaceView";
+import { Store } from "./Store";
 
+class Garage {
   static instance: Garage;
 
-  constructor() {
-    this.checkInstance();
+  private store = Store.getInstance();
+
+  static getInstance() {
+    if (!Garage.instance) {
+      Garage.instance = new Garage();
+    }
+    return Garage.instance;
   }
 
-  checkInstance = () => {
-    if (Garage.isExits) {
-      return Garage.instance;
+  update = () => {
+    this.store.loadAllCars();
+    const garageRace = document.getElementById("garage-race");
+    if (garageRace) {
+      const race = new Race();
+      garageRace.innerHTML = race.render();
     }
-    Garage.isExits = true;
-    Garage.instance = this;
-    return true;
   };
 }
 
-const garage = new Garage();
-
-export default garage;
+export default Garage;

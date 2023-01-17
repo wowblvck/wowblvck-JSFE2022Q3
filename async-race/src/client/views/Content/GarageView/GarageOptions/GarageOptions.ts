@@ -1,8 +1,14 @@
 import { AppComponent } from "../../../../core/interfaces/AppComponent";
 import generateRandomCars from "../../../../core/utils/utils";
 import car from "../../../../core/components/Car";
+import Garage from "../../../../core/components/Garage";
+import { Store } from "../../../../core/components/Store";
 
-class Race implements AppComponent {
+class GarageOptions implements AppComponent {
+  private garage: Garage = Garage.getInstance();
+
+  private store: Store = Store.getInstance();
+
   render = () => `
   <div class="col-lg-2">
     <div class="card h-100">
@@ -27,7 +33,9 @@ class Race implements AppComponent {
         generateBtn.disabled = true;
         const cars = generateRandomCars();
         Promise.all(cars.map((elem) => car.create(elem)))
-          .then(() => {})
+          .then(() => {
+            this.store.loadAllCars(this.store.Page);
+          })
           .catch((error) => console.log(error));
         generateBtn.disabled = false;
       }
@@ -35,4 +43,4 @@ class Race implements AppComponent {
   };
 }
 
-export default Race;
+export default GarageOptions;
