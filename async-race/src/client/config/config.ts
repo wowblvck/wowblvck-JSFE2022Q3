@@ -5,6 +5,7 @@ const MAX_CARS_PER_PAGE = 7;
 const urlPaths = {
   Garage: `${BASE_URL}/garage`,
   Winners: `${BASE_URL}/winners`,
+  Engine: `${BASE_URL}/engine`,
 };
 
 export { urlPaths, MAX_CARS_PER_PAGE };

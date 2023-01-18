@@ -1,8 +1,12 @@
-interface Cars {
+interface Car {
   create: (body: object) => Promise<CarData>;
   update: (id: number, body: object) => Promise<CarData>;
   getCars: (page: number, limit: number) => Promise<CarsData>;
-  getImage: (color: string) => string;
+  getImage: (id: number, color: string) => string;
+  startEngine: (id: number) => Promise<EngineData>;
+  stopEngine: (id: number) => Promise<EngineData>;
+  drive: (id: number) => Promise<boolean | object>;
+  finishIcon: (id: number) => string;
 }
 
 interface CarData {
@@ -16,4 +20,9 @@ interface CarsData {
   count: number;
 }
 
-export { Cars, CarData };
+interface EngineData {
+  velocity: number;
+  distance: number;
+}
+
+export { Car, CarData, EngineData };

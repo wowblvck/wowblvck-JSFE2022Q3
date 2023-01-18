@@ -7,6 +7,13 @@ interface StoreData {
   maxPages: number;
   itemsOfPage: number;
   idForUpdate: number;
+  animation: AnimationData;
 }
 
-export default StoreData;
+interface AnimationData {
+  [key: number]: {
+    id: number;
+  };
+}
+
+export { StoreData, AnimationData };

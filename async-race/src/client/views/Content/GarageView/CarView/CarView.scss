@@ -1,0 +1,34 @@
+@import "../../../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../../../node_modules/bootstrap/scss/variables";
+@import "../../../../../../node_modules/bootstrap/scss/mixins";
+
+.car-icon {
+  display: block;
+  width: 120px;
+  position: relative;
+  top: 10px;
+  margin: 0;
+
+  @include media-breakpoint-between(xs, sm) { 
+    width: 80px;
+    top: 7px;
+  }
+}
+
+.finish-icon {
+  position: absolute;
+  right: 130px;
+  transform: translateY(-100%);
+
+  @include media-breakpoint-between(xs, sm) { 
+    right: 100px;
+  }
+
+  @include media-breakpoint-between(sm, md) { 
+    right: 120px;
+  }
+
+  @include media-breakpoint-between(md, lg) { 
+    right: 130px;
+  }
+}

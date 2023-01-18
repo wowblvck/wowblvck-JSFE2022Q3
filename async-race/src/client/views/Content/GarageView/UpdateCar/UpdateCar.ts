@@ -55,7 +55,7 @@ class UpdateCar implements AppComponent {
               <span class="input-group-text" id="inputGroup-sizing-sm">Name</span>
               <input id="update-car" type="text" class="form-control" aria-label="Name of create car" aria-describedby="inputGroup-sizing-sm">
             </div>
-            <input type="color" class="color-picker" id="update-car-picker" value="#0000ff">
+            <input type="color" class="color-picker" id="update-car-picker" value="#0000ff" disabled>
           </div>
         <button id="update-car-btn" class="btn btn-primary" disabled>Update</button>
       </div>

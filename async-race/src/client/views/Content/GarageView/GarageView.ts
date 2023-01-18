@@ -4,7 +4,7 @@ import GarageOptions from "./GarageOptions/GarageOptions";
 import RaceView from "./RaceView/RaceView";
 
 import "./GarageView.scss";
-import { carsLoadedEvent, Store } from "../../../core/components/Store";
+import { carsLoadedEvent } from "../../../core/components/Store";
 
 class GarageView {
   private create: CreateCar = new CreateCar();
@@ -14,8 +14,6 @@ class GarageView {
   private garageOptions: GarageOptions = new GarageOptions();
 
   private raceView: RaceView = new RaceView();
-
-  private store: Store = Store.getInstance();
 
   constructor() {
     carsLoadedEvent.on("cars-loaded", this.updateRender);

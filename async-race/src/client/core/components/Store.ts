@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import { MAX_CARS_PER_PAGE } from "../../config/config";
 import { CarData } from "../interfaces/Car";
-import StoreData from "../interfaces/Store";
+import { StoreData, AnimationData } from "../interfaces/Store";
 import car from "./Car";
 
 const carsLoadedEvent = new EventEmitter();
@@ -13,6 +13,7 @@ const DEFAULT_STATE: StoreData = {
   maxPages: 1,
   itemsOfPage: MAX_CARS_PER_PAGE,
   idForUpdate: -1,
+  animation: {},
 };
 
 class Store {
@@ -73,6 +74,14 @@ class Store {
 
   set UpdateID(id: number) {
     this.state.idForUpdate = id;
+  }
+
+  get Animation() {
+    return this.state.animation;
+  }
+
+  set Animation(animation: AnimationData) {
+    this.state.animation = animation;
   }
 
   loadAllCars = (pageNumber = 1) => {

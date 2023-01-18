@@ -1,6 +1,9 @@
 import car from "../../../../core/components/Car";
 import { Store } from "../../../../core/components/Store";
+import CarController from "../../../../core/controllers/CarController";
 import { AppComponent } from "../../../../core/interfaces/AppComponent";
+
+import "./CarView.scss";
 
 class CarView implements AppComponent {
   private id: number;
@@ -11,6 +14,8 @@ class CarView implements AppComponent {
 
   private store: Store = Store.getInstance();
 
+  private carController: CarController = CarController.getInstance();
+
   constructor(id: number, name: string, color: string) {
     this.id = id;
     this.name = name;
@@ -18,7 +23,9 @@ class CarView implements AppComponent {
   }
 
   addEvents = () => {
-    const btnRemove = document.getElementById(`btn-remove-${this.id}`);
+    const btnRemove = document.getElementById(
+      `btn-remove-${this.id}`
+    ) as HTMLButtonElement;
     if (!btnRemove) throw new Error("Button remove not found!");
     btnRemove.addEventListener("click", () => {
       car
@@ -32,7 +39,9 @@ class CarView implements AppComponent {
         .catch((error) => console.log(error));
     });
 
-    const btnEdit = document.getElementById(`btn-update-${this.id}`);
+    const btnEdit = document.getElementById(
+      `btn-update-${this.id}`
+    ) as HTMLButtonElement;
     if (!btnEdit) throw new Error("Button update not found!");
     btnEdit.addEventListener("click", () => {
       this.store.UpdateID = this.id;
@@ -47,33 +56,62 @@ class CarView implements AppComponent {
         ) as HTMLButtonElement;
         if (!updateBtn) throw new Error("Update btn not found!");
         updateBtn.disabled = false;
-      }
 
-      const updateColorPicker = document.getElementById(
-        "update-car-picker"
-      ) as HTMLInputElement;
-      if (!updateColorPicker) throw new Error("Update color picker not found!");
-      updateColorPicker.value = this.color;
+        const updateColorPicker = document.getElementById(
+          "update-car-picker"
+        ) as HTMLInputElement;
+        if (!updateColorPicker)
+          throw new Error("Update color picker not found!");
+        updateColorPicker.disabled = false;
+        updateColorPicker.value = this.color;
+      }
+    });
+
+    const btnStart = document.getElementById(
+      `btn-engine-start-${this.id}`
+    ) as HTMLButtonElement;
+    if (!btnStart) throw new Error("Button start engine not found!");
+    btnStart.addEventListener("click", () => {
+      this.carController
+        .startDriving(this.id)
+        .then(() => {})
+        .catch((error) => console.log(error));
+    });
+
+    const btnStop = document.getElementById(
+      `btn-engine-stop-${this.id}`
+    ) as HTMLButtonElement;
+    if (!btnStop) throw new Error("Button stop engine not found!");
+    btnStop.addEventListener("click", () => {
+      this.carController
+        .stopDriving(this.id)
+        .then(() => {})
+        .catch((error) => console.log(error));
     });
   };
 
   render = () => `
-  <div class="d-flex flex-wrap justify-content-between align-items-center">
-    <div class="btn-group btn-group-sm" role="group" aria-label="Controls Options">
-      <button id="btn-update-${
-        this.id
-      }" type="button" class="btn btn-outline-primary">Select car</button>
-      <button id="btn-remove-${
-        this.id
-      }" type="button" class="btn btn-outline-primary">Remove car</button>
-      <button type="button" class="btn btn-outline-success">Start Engine</button>
-      <button type="button" class="btn btn-outline-success">Stop Engine</button>
+    <div class="d-flex flex-column flex-md-row gap-2 justify-content-between align-items-center">
+      <div class="btn-group btn-group-sm" role="group" aria-label="Controls Options">
+        <button id="btn-update-${
+          this.id
+        }" type="button" class="btn btn-outline-primary">Select car</button>
+        <button id="btn-remove-${
+          this.id
+        }" type="button" class="btn btn-outline-primary">Remove car</button>
+        <button id="btn-engine-start-${
+          this.id
+        }" type="button" class="btn btn-outline-primary">Start Engine</button>
+        <button id="btn-engine-stop-${
+          this.id
+        }" type="button" class="btn btn-outline-primary" disabled>Stop Engine</button>
+      </div>
+      <p class="fs-6 mb-0">${this.name}</p>
     </div>
-    <p class="fs-6 mb-0">${this.name}</p>
-  </div>
-  <div style="border-bottom: 4px dashed #000000;">
-    ${car.getImage(this.color)}
-  </div>
+    <div style="position: relative; border-bottom: 4px dashed #000000;">
+      ${car.getImage(this.id, this.color)}
+      ${car.finishIcon(this.id)}
+    </div>
   `;
 }
 
