@@ -18,10 +18,11 @@ const config = {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].[contenthash].js",
     clean: isProduction,
-    assetModuleFilename: pathData => {
-      const filepath = path.dirname(pathData.filename).split('/').slice(1).join('/');
-      return `${filepath}/[name][ext]`;
-    },
+    assetModuleFilename: "assets/[hash][ext][query]",
+    // assetModuleFilename: pathData => {
+    //   const filepath = path.dirname(pathData.filename).split('/').slice(1).join('/');
+    //   return `${filepath}/[name][ext]`;
+    // },
   },
   devServer: {
     static: {
