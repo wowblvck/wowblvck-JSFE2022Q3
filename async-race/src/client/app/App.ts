@@ -17,6 +17,7 @@ class App {
 
   addEvents = () => {
     this.content.addEvents();
+    this.header.addEvents();
   };
 }
 

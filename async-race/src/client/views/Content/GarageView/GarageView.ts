@@ -29,7 +29,7 @@ class GarageView {
   };
 
   render = () => `
-  <main id="garage" class="flex-shrink-0 py-4">
+  <div id="garage-view">
     <section class="garage-options container">
       <div class="accordion" id="accordionExample">
         <div class="accordion-item">
@@ -53,7 +53,7 @@ class GarageView {
     <section id="race-view" class="py-3 container">
       ${this.raceView.render()}
     </section>
-  </main>
+  </div>
   `;
 
   addEvents = () => {

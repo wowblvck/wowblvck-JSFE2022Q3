@@ -8,6 +8,7 @@ interface StoreData {
   itemsOfPage: number;
   idForUpdate: number;
   animation: AnimationData;
+  viewState: string;
 }
 
 interface AnimationData {

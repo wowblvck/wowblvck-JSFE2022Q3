@@ -14,6 +14,7 @@ const DEFAULT_STATE: StoreData = {
   itemsOfPage: MAX_CARS_PER_PAGE,
   idForUpdate: -1,
   animation: {},
+  viewState: "garage",
 };
 
 class Store {
@@ -30,6 +31,14 @@ class Store {
 
   constructor() {
     this.loadAllCars();
+  }
+
+  get View() {
+    return this.state.viewState;
+  }
+
+  set View(view: string) {
+    this.state.viewState = view;
   }
 
   get Cars() {
