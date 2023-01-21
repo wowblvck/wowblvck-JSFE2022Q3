@@ -96,7 +96,8 @@ module.exports = () => {
 
     ghpages.publish("dist", {
       dest: "async-race",
-      message: "build: async-race production"
+      message: "build: async-race production",
+      repo: "git@github.com:rolling-scopes-school/wowblvck-JSFE2022Q3.git"
     });
   } else {
     config.mode = "development";
