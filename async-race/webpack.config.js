@@ -14,7 +14,7 @@ const stylesHandler = isProduction
 const config = {
   entry: "./src/client/index.ts",
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "./dist"),
     filename: "[name].[contenthash].js",
     clean: isProduction,
     assetModuleFilename: "assets/[hash][ext][query]",
@@ -92,7 +92,9 @@ module.exports = () => {
   if (isProduction) {
     config.mode = "production";
 
-    config.plugins.push(new MiniCssExtractPlugin());
+    config.plugins.push(new MiniCssExtractPlugin({
+      filename: '[name].[contenthash].css'
+    }));
 
     ghpages.publish("dist", {
       dest: "async-race",
