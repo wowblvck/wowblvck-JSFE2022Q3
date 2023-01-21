@@ -32,6 +32,17 @@ class RaceView implements AppComponent {
         } else {
           this.store.Page += 1;
         }
+        const raceBtn = document.getElementById(
+          "race-btn"
+        ) as HTMLButtonElement;
+        if (!raceBtn) throw new Error("Race button not found!");
+        if (raceBtn.disabled) raceBtn.disabled = false;
+
+        const raceResetBtn = document.getElementById(
+          "reset-race-btn"
+        ) as HTMLButtonElement;
+        if (!raceResetBtn) throw new Error("Reset race button not found!");
+        if (!raceResetBtn.disabled) raceResetBtn.disabled = true;
         this.store.loadAllCars(this.store.Page);
       }
     });
@@ -45,6 +56,17 @@ class RaceView implements AppComponent {
         } else {
           this.store.Page -= 1;
         }
+        const raceBtn = document.getElementById(
+          "race-btn"
+        ) as HTMLButtonElement;
+        if (!raceBtn) throw new Error("Race button not found!");
+        if (raceBtn.disabled) raceBtn.disabled = false;
+
+        const raceResetBtn = document.getElementById(
+          "reset-race-btn"
+        ) as HTMLButtonElement;
+        if (!raceResetBtn) throw new Error("Reset race button not found!");
+        if (!raceResetBtn.disabled) raceResetBtn.disabled = true;
         this.store.loadAllCars(this.store.Page);
       }
     });
