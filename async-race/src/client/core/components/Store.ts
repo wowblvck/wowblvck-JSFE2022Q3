@@ -1,10 +1,18 @@
 import { EventEmitter } from "events";
-import { MAX_CARS_PER_PAGE } from "../../config/config";
+import {
+  DEFAULT_ORDER,
+  DEFAULT_SORT,
+  MAX_CARS_PER_PAGE,
+  MAX_WINNERS_PER_PAGE,
+} from "../../config/config";
 import { CarData } from "../interfaces/Car";
 import { StoreData, AnimationData } from "../interfaces/Store";
-import car from "./Car";
+import { WinnerData } from "../interfaces/Winner";
+import Car from "./Car";
+import Winner from "./Winner";
 
 const carsLoadedEvent = new EventEmitter();
+const winnersLoadedEvent = new EventEmitter();
 
 const DEFAULT_STATE: StoreData = {
   cars: [],
@@ -15,10 +23,21 @@ const DEFAULT_STATE: StoreData = {
   idForUpdate: -1,
   animation: {},
   viewState: "garage",
+  sortBy: DEFAULT_SORT,
+  sortOrder: DEFAULT_ORDER,
+  winners: [],
+  winnersCount: 0,
+  winnerPage: 1,
+  winnerMaxPages: 1,
+  winnerItemsOfPage: MAX_WINNERS_PER_PAGE,
 };
 
 class Store {
   private state = DEFAULT_STATE;
+
+  private car: Car = Car.getInstance();
+
+  private winner: Winner = Winner.getInstance();
 
   static instance: Store;
 
@@ -31,6 +50,23 @@ class Store {
 
   constructor() {
     this.loadAllCars();
+    this.loadWinners();
+  }
+
+  get Sort() {
+    return this.state.sortBy;
+  }
+
+  set Sort(sortType: string) {
+    this.state.sortBy = sortType;
+  }
+
+  get Order() {
+    return this.state.sortOrder;
+  }
+
+  set Order(orderType: string) {
+    this.state.sortOrder = orderType;
   }
 
   get View() {
@@ -69,12 +105,48 @@ class Store {
     return this.state.maxPages;
   }
 
+  get Winners() {
+    return this.state.winners;
+  }
+
+  set Winners(winners: WinnerData[]) {
+    this.state.winners = winners;
+  }
+
+  get WinnerPage() {
+    return this.state.winnerPage;
+  }
+
+  set WinnerPage(pageNumber: number) {
+    this.state.winnerPage = pageNumber;
+  }
+
+  get WinnersCount() {
+    return this.state.winnersCount;
+  }
+
+  set WinnersCount(count: number) {
+    this.state.winnersCount = count;
+  }
+
+  get WinnerMaxPages() {
+    return this.state.winnerMaxPages;
+  }
+
   get ItemsOfPage() {
     return this.state.itemsOfPage;
   }
 
   set ItemsOfPage(items: number) {
     this.state.itemsOfPage = items;
+  }
+
+  get WinnerItemsOfPage() {
+    return this.state.winnerItemsOfPage;
+  }
+
+  set WinnerItemsOfPage(items: number) {
+    this.state.winnerItemsOfPage = items;
   }
 
   get UpdateID() {
@@ -94,7 +166,7 @@ class Store {
   }
 
   loadAllCars = (pageNumber = 1) => {
-    const cars = car.getCars(pageNumber);
+    const cars = this.car.getCars(pageNumber);
     cars
       .then(({ items, count }) => {
         this.state.cars = items;
@@ -108,6 +180,29 @@ class Store {
         console.log(error);
       });
   };
+
+  loadWinners = (
+    sort = DEFAULT_SORT,
+    order = DEFAULT_ORDER,
+    pageNumber = 1,
+    limit = MAX_WINNERS_PER_PAGE
+  ) => {
+    const winners = this.winner.getWinners(sort, order, pageNumber, limit);
+    winners
+      .then(({ items, count }) => {
+        this.state.winners = items;
+        this.state.winnersCount = count;
+        if (this.state.winners.length !== 0) {
+          this.state.winnerMaxPages = Math.ceil(
+            this.WinnersCount / MAX_WINNERS_PER_PAGE
+          );
+        }
+        winnersLoadedEvent.emit("winners-loaded");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 }
 
-export { Store, carsLoadedEvent };
+export { Store, carsLoadedEvent, winnersLoadedEvent };

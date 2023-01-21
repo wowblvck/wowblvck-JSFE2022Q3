@@ -1,9 +1,11 @@
-import car from "../../../../core/components/Car";
+import Car from "../../../../core/components/Car";
 import { Store } from "../../../../core/components/Store";
 import { AppComponent } from "../../../../core/interfaces/AppComponent";
 
 class CreateCar implements AppComponent {
   private store: Store = Store.getInstance();
+
+  private car: Car = Car.getInstance();
 
   render = () => `
   <div class="col-lg-5 mb-3 mb-lg-0">
@@ -47,7 +49,7 @@ class CreateCar implements AppComponent {
           name: createInput.value,
           color: createColorPicker.value,
         };
-        car
+        this.car
           .create(body)
           .then(() => {
             createInput.value = "";

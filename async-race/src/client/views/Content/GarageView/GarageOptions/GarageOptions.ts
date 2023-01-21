@@ -1,13 +1,18 @@
 import { AppComponent } from "../../../../core/interfaces/AppComponent";
 import { generateRandomCars } from "../../../../core/utils/utils";
-import car from "../../../../core/components/Car";
 import { Store } from "../../../../core/components/Store";
 import CarController from "../../../../core/controllers/CarController";
+import Car from "../../../../core/components/Car";
+import Winner from "../../../../core/components/Winner";
 
 class GarageOptions implements AppComponent {
   private store: Store = Store.getInstance();
 
+  private car: Car = Car.getInstance();
+
   private carController: CarController = CarController.getInstance();
+
+  private winner: Winner = Winner.getInstance();
 
   render = () => `
   <div class="col-lg-2">
@@ -32,7 +37,7 @@ class GarageOptions implements AppComponent {
       if (!generateBtn.disabled) {
         generateBtn.disabled = true;
         const cars = generateRandomCars();
-        Promise.all(cars.map((elem) => car.create(elem)))
+        Promise.all(cars.map((elem) => this.car.create(elem)))
           .then(() => {
             this.store.loadAllCars(this.store.Page);
           })
@@ -47,12 +52,19 @@ class GarageOptions implements AppComponent {
       raceBtn.disabled = true;
       this.carController
         .race(this.carController.startDriving)
-        .then(({ name, time }) => {
+        .then(async ({ id, name, time }) => {
           const resetBtn = document.getElementById(
             "reset-race-btn"
           ) as HTMLButtonElement;
           if (!resetBtn) throw new Error("Reset race button not found!");
           resetBtn.disabled = false;
+
+          this.winner
+            .save({ id, time })
+            .then(() => {
+              this.store.loadWinners();
+            })
+            .catch((err) => console.log(err));
 
           const wonAlert = document.getElementById(
             "won-alert"

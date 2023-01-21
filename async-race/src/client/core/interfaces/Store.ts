@@ -1,4 +1,5 @@
 import { CarData } from "./Car";
+import { WinnerData } from "./Winner";
 
 interface StoreData {
   cars: CarData[];
@@ -9,6 +10,13 @@ interface StoreData {
   idForUpdate: number;
   animation: AnimationData;
   viewState: string;
+  sortBy: string;
+  sortOrder: string;
+  winners: WinnerData[];
+  winnersCount: number;
+  winnerPage: number;
+  winnerMaxPages: number;
+  winnerItemsOfPage: number;
 }
 
 interface AnimationData {

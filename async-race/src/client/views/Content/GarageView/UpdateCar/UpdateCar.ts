@@ -1,9 +1,11 @@
-import car from "../../../../core/components/Car";
+import Car from "../../../../core/components/Car";
 import { Store } from "../../../../core/components/Store";
 import { AppComponent } from "../../../../core/interfaces/AppComponent";
 
 class UpdateCar implements AppComponent {
   private store: Store = Store.getInstance();
+
+  private car: Car = Car.getInstance();
 
   addEvents = () => {
     const input = document.getElementById("update-car") as HTMLInputElement;
@@ -31,7 +33,7 @@ class UpdateCar implements AppComponent {
           name: input.value,
           color: colorPicker.value,
         };
-        car
+        this.car
           .update(this.store.UpdateID, body)
           .then(() => {
             input.value = "";
@@ -39,6 +41,7 @@ class UpdateCar implements AppComponent {
             colorPicker.value = "#0000ff";
             this.store.UpdateID = -1;
             this.store.loadAllCars(this.store.Page);
+            this.store.loadWinners();
           })
           .catch((error) => console.log(error));
       }

@@ -1,7 +1,8 @@
-import car from "../../../../core/components/Car";
+import Car from "../../../../core/components/Car";
 import { Store } from "../../../../core/components/Store";
 import CarController from "../../../../core/controllers/CarController";
 import { AppComponent } from "../../../../core/interfaces/AppComponent";
+import Winner from "../../../../core/components/Winner";
 
 import "./CarView.scss";
 
@@ -16,6 +17,10 @@ class CarView implements AppComponent {
 
   private carController: CarController = CarController.getInstance();
 
+  private car: Car = Car.getInstance();
+
+  private winner: Winner = Winner.getInstance();
+
   constructor(id: number, name: string, color: string) {
     this.id = id;
     this.name = name;
@@ -28,13 +33,29 @@ class CarView implements AppComponent {
     ) as HTMLButtonElement;
     if (!btnRemove) throw new Error("Button remove not found!");
     btnRemove.addEventListener("click", () => {
-      car
+      this.car
         .delete(this.id)
         .then(() => {
           if (this.store.ItemsOfPage <= 1 && this.store.Page !== 1) {
             this.store.Page -= 1;
           }
           this.store.loadAllCars(this.store.Page);
+          this.winner
+            .delete(this.id)
+            .then(() => {
+              if (
+                this.store.WinnerItemsOfPage <= 1 &&
+                this.store.WinnerPage !== 1
+              ) {
+                this.store.WinnerPage -= 1;
+              }
+              this.store.loadWinners(
+                this.store.Sort,
+                this.store.Order,
+                this.store.WinnerPage
+              );
+            })
+            .catch((err) => console.log(err));
         })
         .catch((error) => console.log(error));
     });
@@ -109,8 +130,8 @@ class CarView implements AppComponent {
       <p class="fs-6 mb-0">${this.name}</p>
     </div>
     <div style="position: relative; border-bottom: 4px dashed #000000;">
-      ${car.getImage(this.id, this.color)}
-      ${car.finishIcon(this.id)}
+      ${this.car.getImage(this.id, this.color)}
+      ${this.car.finishIcon(this.id)}
     </div>
   `;
 }

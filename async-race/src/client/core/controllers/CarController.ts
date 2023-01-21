@@ -1,10 +1,12 @@
-import car from "../components/Car";
+import Car from "../components/Car";
 import { Store } from "../components/Store";
 import RaceResult from "../interfaces/Race";
 import { getDistanceBetweenElements } from "../utils/utils";
 
 class CarController {
   private store: Store = Store.getInstance();
+
+  private car: Car = Car.getInstance();
 
   static instance: CarController;
 
@@ -55,7 +57,7 @@ class CarController {
     startButton.classList.remove("btn-outline-primary");
     startButton.classList.add("btn-outline-danger");
 
-    const { velocity, distance } = await car.startEngine(id);
+    const { velocity, distance } = await this.car.startEngine(id);
     const time = Math.round(distance / velocity);
 
     startButton.classList.remove("btn-outline-danger");
@@ -77,7 +79,7 @@ class CarController {
       Math.floor(getDistanceBetweenElements(carIcon, finishIcon)) + 80;
 
     this.store.Animation[id] = this.animation(carIcon, htmlDistance, time);
-    const { success } = await car.drive(id);
+    const { success } = await this.car.drive(id);
     const successFlag = success === undefined ? false : success;
     if (!success) window.cancelAnimationFrame(this.store.Animation[id].id);
     const carItem = this.store.Cars.find((elem) => elem.id === id);
@@ -93,7 +95,7 @@ class CarController {
     btnStop.disabled = true;
     btnStop.classList.remove("btn-outline-primary");
     btnStop.classList.add("btn-outline-danger");
-    await car.stopEngine(id);
+    await this.car.stopEngine(id);
     btnStop.classList.remove("btn-outline-danger");
     btnStop.classList.add("btn-outline-primary");
 

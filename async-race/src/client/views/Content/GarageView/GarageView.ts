@@ -29,31 +29,29 @@ class GarageView {
   };
 
   render = () => `
-  <div id="garage-view">
-    <section class="garage-options container">
-      <div class="accordion" id="accordionExample">
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingOne">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              Garage Options
-            </button>
-          </h2>
-          <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-              <div class="row">
-                ${this.create.render()}
-                ${this.update.render()}
-                ${this.garageOptions.render()}
-              </div>
+  <section class="garage-options container">
+    <div class="accordion" id="accordionExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Garage Options
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <div class="row">
+              ${this.create.render()}
+              ${this.update.render()}
+              ${this.garageOptions.render()}
             </div>
           </div>
         </div>
       </div>
-    </section>
-    <section id="race-view" class="py-3 container">
-      ${this.raceView.render()}
-    </section>
-  </div>
+    </div>
+  </section>
+  <section id="race-view" class="py-3 container">
+    ${this.raceView.render()}
+  </section>
   `;
 
   addEvents = () => {
