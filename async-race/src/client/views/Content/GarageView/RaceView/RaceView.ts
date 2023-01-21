@@ -48,6 +48,18 @@ class RaceView implements AppComponent {
         this.store.loadAllCars(this.store.Page);
       }
     });
+
+    const alert = document.getElementById("won-alert") as HTMLDivElement;
+    if (!alert) throw new Error("Won alert box not found!");
+    alert.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (e.target) {
+        const target = e.target as HTMLButtonElement;
+        if (target.matches("button")) {
+          alert.style.visibility = "hidden";
+        }
+      }
+    });
   };
 
   render = () => `
