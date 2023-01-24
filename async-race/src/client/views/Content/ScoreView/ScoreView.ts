@@ -93,6 +93,10 @@ class ScoreView {
 
   render = () => `
     <section id="score-table" class="container">
+      <h2 class="text-center mb-1">Winners</h2>
+      <p class="fs-5 text-center mb-3">Winners: ${this.store.WinnersCount} (${
+    this.store.WinnerItemsOfPage
+  } on page)</p>
       <table class="table table-striped align-middle">
         <thead class="table-dark">
           <tr class="align-middle">

@@ -26,7 +26,7 @@ class Content implements AppComponent {
       <div id="garage-view">
         ${this.garage.render()}
       </div>
-      <div id="score-view" class="flex-shrink-0 py-4" style="display: none;">
+      <div id="score-view" style="display: none;">
         ${this.score.render()}
       </div>
     </main>
